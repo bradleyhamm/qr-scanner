@@ -67,13 +67,13 @@ Or drag the `dist/` folder to [netlify.com/drop](https://app.netlify.com/drop).
 
 - [Vite](https://vitejs.dev/) — build tool
 - [React 18](https://react.dev/) — UI
-- [jsQR](https://github.com/cozmo/jsQR) — QR decoding (loaded via CDN)
+- [jsQR](https://github.com/cozmo/jsQR) — QR decoding
 - Web Audio API — sound effects
 - `localStorage` — persistence
 
 ## Notes
 
 - The scanner runs at every animation frame (~60fps) for fast detection
-- A 1.8s cooldown after each scan prevents double-reads of the same card
+- A 1s cooldown after each scan prevents double-reads of the same card
 - Works best with good lighting and holding the card steady for ~0.5s
 - All data is stored locally in the browser — nothing is sent to any server

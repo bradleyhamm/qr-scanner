@@ -57,6 +57,7 @@ function saveToStorage(list) {
 }
 
 export default function App() {
+  const cooldown = 1000;
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const animRef = useRef(null);
@@ -76,7 +77,7 @@ export default function App() {
   const handleScan = useCallback((value) => {
     if (cooldownRef.current) return;
     cooldownRef.current = true;
-    setTimeout(() => { cooldownRef.current = false; }, 1800);
+    setTimeout(() => { cooldownRef.current = false; }, cooldown);
 
     setScanned(prev => {
       if (prev.includes(value)) {

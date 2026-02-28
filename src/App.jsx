@@ -1,19 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import jsQR from "jsqr";
 
 const STORAGE_KEY = "qr-scanned-cards";
-
-function useJsQR() {
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    if (window.jsQR) { setLoaded(true); return; }
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js";
-    script.onload = () => setLoaded(true);
-    script.onerror = () => console.error("Failed to load jsQR");
-    document.head.appendChild(script);
-  }, []);
-  return loaded;
-}
 
 function playHappy() {
   try {
@@ -69,7 +57,6 @@ function saveToStorage(list) {
 }
 
 export default function App() {
-  const jsQRLoaded = useJsQR();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const animRef = useRef(null);
@@ -107,7 +94,6 @@ export default function App() {
 
   // Camera + scan loop
   useEffect(() => {
-    if (!jsQRLoaded) return;
     let stream;
     let cancelled = false;
 
@@ -140,7 +126,7 @@ export default function App() {
         const ctx = canvas.getContext("2d");
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const code = window.jsQR(imageData.data, imageData.width, imageData.height, {
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
           inversionAttempts: "dontInvert"
         });
         if (code?.data) handleScan(code.data);
@@ -154,7 +140,7 @@ export default function App() {
       cancelAnimationFrame(animRef.current);
       if (stream) stream.getTracks().forEach(t => t.stop());
     };
-  }, [jsQRLoaded, handleScan]);
+  }, [handleScan]);
 
   const copyList = useCallback(() => {
     navigator.clipboard.writeText(scanned.join("\n")).then(() => {
